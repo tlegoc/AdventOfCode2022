@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
     std::ifstream input("input");
 
-    int prev, x, sum, count = 0;
+    int x = 0;
     std::vector<int> data;
 
     while (input >> x)
@@ -29,8 +29,11 @@ int main(int argc, char *argv[])
         CODE HERE
 
     */
-
-    printf("Hello World\n");
+   
+    for (auto i : data)
+    {
+        std::cout << i << std::endl;
+    }
 
     return 0;
 }
