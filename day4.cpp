@@ -27,37 +27,26 @@ int main(int argc, char *argv[])
 
     while (input >> s)
     {
-        std::string first_pair;
-        std::string second_pair;
+        int A1, A2, B1, B2;
 
-        split_string(s, ',', &first_pair, &second_pair);
+        const char* c = s.c_str();
+        sscanf(c, "%d-%d,%d-%d", &A1, &A2, &B1, &B2);
 
-        //Fp stands for first pair, h for head, t for tail
-        std::string fp_h;
-        std::string fp_t;
-        split_string(first_pair, '-', &fp_h, &fp_t);
-        printf("fp_h: %s, fp_t: %s -- ", fp_h.c_str(), fp_t.c_str());
-
-        //Sp stands for second pair, h for head, t for tail
-        std::string sp_h;
-        std::string sp_t;
-        split_string(second_pair, '-', &sp_h, &sp_t);
-        printf("sp_h: %s, sp_t: %s\n", sp_h.c_str(), sp_t.c_str());
-
+        
         //Ugly but works, I tried to be fast instead of being optimised and clean
-        if (stoi(fp_h) <= stoi(sp_h) && stoi(fp_t) >= stoi(sp_t))
+        if (A1 <= B1 && A2 >= B2)
             self_contained_ranges++;
-        else if (stoi(sp_h) <= stoi(fp_h) && stoi(sp_t) >= stoi(fp_t))
+        else if (B1 <= A1 && B2 >= A2)
             self_contained_ranges++;
 
         //Could easily be reduced
-        if (stoi(fp_h) <= stoi(sp_h) && stoi(fp_t) >= stoi(sp_h))
+        if (A1 <= B1 && A2 >= B1)
             overlapping_ranges++;
-        else if (stoi(fp_h) <= stoi(sp_t) && stoi(fp_t) >= stoi(sp_t))
+        else if (A1 <= B2 && A2 >= B2)
             overlapping_ranges++;
-        else if (stoi(fp_h) <= stoi(sp_h) && stoi(fp_t) >= stoi(sp_t))
+        else if (A1 <= B1 && A2 >= B2)
             overlapping_ranges++;
-        else if (stoi(sp_h) <= stoi(fp_h) && stoi(sp_t) >= stoi(fp_t))
+        else if (B1 <= A1 && B2 >= A2)
             overlapping_ranges++;
     }
 
