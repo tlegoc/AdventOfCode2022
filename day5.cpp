@@ -11,9 +11,8 @@ void display_crates(std::vector<std::vector<char>> crates)
     {
         printf("Crate: ");
         for (auto c : crate)
-        {
             printf(" [%c]", c);
-        }
+
         printf("\n");
     }
 }
@@ -22,7 +21,6 @@ int main(int argc, char *argv[])
 {
 
     // Loading our file
-
     if (!std::filesystem::exists("day5"))
     {
         printf("input file does not exist\n");
@@ -32,7 +30,6 @@ int main(int argc, char *argv[])
     std::ifstream input("day5");
 
     // Load the first ten lines
-
     std::vector<std::vector<char>> crates(9);
 
     int i = 0;
@@ -77,9 +74,8 @@ int main(int argc, char *argv[])
 
     printf("Last crate of each stack: ");
     for (auto crate : crates)
-    {
         printf("%c", crate.back());
-    }
+
     printf("\n");
 
     return 0;
