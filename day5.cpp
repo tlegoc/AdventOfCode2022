@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
         // For each crate
         for (int j = 1; j < line.length(); j += 4)
         {
-            char c = line.c_str()[j];
+            char c = line[j];
 
             // Check if it's really a crate
             if (isalpha(c))
