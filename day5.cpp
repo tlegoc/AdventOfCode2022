@@ -7,6 +7,7 @@
 // Will show the stacks horizontally cause I ain't got time
 void display_crates(std::vector<std::vector<char>> crates)
 {
+    printf("--------------------\n");
     for (auto crate : crates)
     {
         printf("Crate: ");
@@ -15,11 +16,11 @@ void display_crates(std::vector<std::vector<char>> crates)
 
         printf("\n");
     }
+    printf("--------------------\n");
 }
 
 int main(int argc, char *argv[])
 {
-
     // Loading our file
     if (!std::filesystem::exists("day5"))
     {
@@ -68,6 +69,8 @@ int main(int argc, char *argv[])
         // We remove the crates we moved
         for (int j = 0; j < quantity; j++)
             crates[from].pop_back();
+
+            display_crates(crates);
     }
 
     display_crates(crates);
