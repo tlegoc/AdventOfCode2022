@@ -72,6 +72,9 @@ struct rope
                 if (current->H.distance(current->T) > 1)
                 {
                     // Place the tail behind the head
+                    //This didn't work. I'm leaving it as is
+                    //So I can find why later
+                    /*
                     if (abs(current->H.x - current->T.x) > abs(current->H.y - current->T.y))
                     {
                         if (current->H.x - current->T.x > 0)
@@ -97,6 +100,34 @@ struct rope
                             current->T.y = current->H.y + 1;
                             current->T.x = current->H.x;
                         }
+                    }*/
+
+                    //Implementation from https://github.com/vss2sn/advent_of_code/blob/master/2022/cpp/day_09b.cpp
+                    int deltaX = current->H.x - current->T.x;
+                    int deltaY = current->H.y - current->T.y;
+
+                    if (std::abs(deltaX) == 2 && std::abs(deltaY) == 0)
+                    {
+                        current->T.x += deltaX / 2;
+                    }
+                    else if (std::abs(deltaX) == 2 && std::abs(deltaY) == 1)
+                    {
+                        current->T.x += deltaX / 2;
+                        current->T.y += deltaY;
+                    }
+                    else if (std::abs(deltaX) == 0 && std::abs(deltaY) == 2)
+                    {
+                        current->T.y += deltaY / 2;
+                    }
+                    else if (std::abs(deltaX) == 1 && std::abs(deltaY) == 2)
+                    {
+                        current->T.x += deltaX;
+                        current->T.y += deltaY / 2;
+                    }
+                    else if (std::abs(deltaX) == 2 && std::abs(deltaY) == 2)
+                    {
+                        current->T.x += deltaX / 2;
+                        current->T.y += deltaY / 2;
                     }
                 }
 
@@ -118,26 +149,6 @@ struct rope
             visited.push_back(pos(T));
     }
 };
-
-void print_rope(rope *r)
-{
-    printf("\033[2J");
-    rope *end = r;
-    while (true)
-    {
-        // position the cursor
-        printf("\033[%i;%if", end->H.y + 130, end->H.x + 200);
-        printf("H");
-
-        if (end->next == nullptr)
-            break;
-        
-        end = end->next;
-    }
-
-    printf("\033[%i;%if", end->T.y + 130, end->T.x + 200);
-    printf("T");
-}
 
 int main(int argc, char *argv[])
 {
@@ -171,17 +182,7 @@ int main(int argc, char *argv[])
 
         // We move the rope
         root.move(direction, distance);
-        /*
-        printf("\033[2J");
-        //print_rope(&root);
-        printf("\033[0;0f");
-        printf("Moving... %c %i: tail %i:%i, head %i:%i, d %i\n", direction, distance, root.T.x, root.T.y, root.H.x, root.H.y, root.H.distance(root.T));
-        //std::this_thread::sleep_for(std::chrono::milliseconds(40));
-        */
     }
-
-    printf("\033[2J");
-    printf("\033[0;0f");
 
     // We get the end of the rope
     rope *end = &root;
