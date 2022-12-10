@@ -25,34 +25,39 @@ int main(int argc, char *argv[])
         data.push_back(x);
     }
 
-
     int processed_count = 0;
     for (int i = 0; i < data.size() - 3; i++)
     {
-        std::vector<char> temp = std::vector<char>(data[i], data[i + 3]);
-
-        // Why doing a loop when you can ctrl+c ctrl+v
-        for (int j = 0; j < temp.size(); j++)
+        bool found = true;
+        for (int j = 0; j < 4; j++)
         {
-            int c = count(temp.begin(), temp.end(), data[i + j]);
-            if (c != 1) break;
-            printf("First 4 different characters appear at %i (%c%c%c%c)\n", processed_count + 4, data[i], data[i + 1], data[i + 2], data[i + 3]);
+            int c = count(data.begin() + i, data.begin() + i + 4, data[i + j]);
+            found = c == 1 && found;
         }
-        
+
+        if (found)
+        {
+            printf("First 4 different characters appear at %i (%c%c%c%c)\n", processed_count + 4, data[i], data[i + 1], data[i + 2], data[i + 3]);
+            break;
+        }
+
         processed_count++;
     }
 
     int processed_count_message = 0;
     for (int i = 0; i < data.size() - 13; i++)
     {
-        std::vector<char> temp = std::vector<char>(data[i], data[i + 13]);
-
-        // Why doing a loop when you can ctrl+c ctrl+v
-        for (int j = 0; j < temp.size(); j++)
+        bool found = true;
+        for (int j = 0; j < 14; j++)
         {
-            int c = count(temp.begin(), temp.end(), data[i + j]);
-            if (c != 1) break;
-            printf("First 14 different characters appear at %i\n", processed_count + 14);
+            int c = count(data.begin() + i, data.begin() + i + 14, data[i + j]);
+            found = c == 1 && found;
+        }
+
+        if (found)
+        {
+            printf("First 14 different characters appear at %i\n", processed_count_message + 14);
+            break;
         }
 
         processed_count_message++;
