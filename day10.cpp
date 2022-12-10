@@ -19,10 +19,11 @@ int main(int argc, char *argv[])
     std::string line;
     std::vector<int> strengths;
 
-    int current_cycle = 1;
+    int cycle_add = 0;
+    int cycle = 1;
+    int X_add = 0;
     int X = 1;
     int display_X = 0;
-    int display_cycle = 1;
     std::string display = "";
     while (std::getline(input, line))
     {
@@ -32,71 +33,45 @@ int main(int argc, char *argv[])
 
         if (line == "noop")
         {
-            strengths.push_back(X * current_cycle);
-            printf("noop: X:%d, cycle:%d, strength:%d\n", X, current_cycle, X * current_cycle);
-            current_cycle++;
-            if (display_X >= X - 1 && display_X <= X + 1)
-            {
-                display += "#";
-            }
-            else
-            {
-                display += ".";
-            }
-            display_X++;
-
-            if (display_X > 40)
-            {
-                display_X = 1;
-                display += "\n";
-            }
+            strengths.push_back(X * cycle);
+            printf("noop: X:%d, cycle:%d, strength:%d\n", X, cycle, X * cycle);
+            X_add = 0;
+            cycle_add = 1;
         }
         else
         {
-            strengths.push_back(X * current_cycle);
-            printf("addx step1: X:%d, cycle:%d, strength:%d\n", X, current_cycle, X * current_cycle);
-            current_cycle++;
-            if (display_X >= X - 1 && display_X <= X + 1)
-            {
-                display += "#";
-            }
-            else
-            {
-                display += ".";
-            }
-            display_X++;
-
-            if (display_X > 40)
-            {
-                display_X = 1;
-                display += "\n";
-            }
-            strengths.push_back(X * current_cycle);
-            printf("addx step2: X:%d, cycle:%d, strength:%d\n", X, current_cycle, X * current_cycle);
-            current_cycle++;
-            if (display_X >= X - 1 && display_X <= X + 1)
-            {
-                display += "#";
-            }
-            else
-            {
-                display += ".";
-            }
-            display_X++;
-
-            if (display_X > 40)
-            {
-                display_X = 1;
-                display += "\n";
-            }
-            X += param;
+            strengths.push_back(X * cycle);
+            printf("addx step1: X:%d, cycle:%d, strength:%d\n", X, cycle, X * cycle);
+            strengths.push_back(X * (cycle + 1));
+            printf("addx step2: X:%d, cycle:%d, strength:%d\n", X, cycle + 1, X * (cycle + 1));
+            X_add = param;
+            cycle_add = 2;
         }
+
+        while (cycle_add > 0) {
+            if (display_X >= X - 1 && display_X <= X + 1) {
+                display += "#";
+            } else {
+                display += " ";
+            }
+            display_X++;
+
+            if (display_X >= 40) {
+                display_X = 0;
+                display += "\n";
+            }
+
+            cycle++;
+            cycle_add--;
+        }
+
+        X += X_add;
     }
 
     int sum = 0;
-    int cycles[] = {20, 60, 100, 140, 180, 220};
+    int notable_cycles[] = {20, 60, 100, 140, 180, 220};
 
-    for (auto cycle : cycles)
+    for (auto cycle : notable_cycles)
     {
         sum += strengths[cycle - 1];
     }
