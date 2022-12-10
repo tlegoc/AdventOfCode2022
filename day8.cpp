@@ -7,7 +7,6 @@ int main(int argc, char *argv[])
 {
 
     // Loading our file
-
     if (!std::filesystem::exists("day8"))
     {
         printf("input file does not exist\n");
@@ -19,6 +18,7 @@ int main(int argc, char *argv[])
     char c = 0;
     std::vector<std::vector<int>> forest = {{}};
 
+    //Reading files
     while (input.get(c))
     {
         if (c == '\n')
@@ -28,6 +28,13 @@ int main(int argc, char *argv[])
         else
             throw std::runtime_error("Invalid character");
     }
+
+
+    /*
+    
+        CALCULATIONS (which tree is visible)
+    
+    */
 
     //For some obscure reason lines 3 to 13 are detected as 99+ in length,
     //Even tho it is clearly not (as seen in debug mode, etc).
@@ -83,6 +90,9 @@ int main(int argc, char *argv[])
         }
     }
 
+
+
+    //Count visible trees
     //We could do this in the main loop but eh, this is easier to read
     int visible_count = 0;
     for (int i = 0; i < size_x; i++)
@@ -93,6 +103,7 @@ int main(int argc, char *argv[])
         }
     }
     printf("Visible count: %d\n", visible_count);
+
 
     /*
 

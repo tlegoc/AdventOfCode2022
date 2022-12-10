@@ -37,6 +37,9 @@ struct pos
     }
 };
 
+//I decided to go with chained ropes instead of having a list.
+//I could've done it with a list, but I wanted to try something new
+//Each node records its tail position (by calling record_pos())
 struct rope
 {
     pos H;
@@ -47,6 +50,8 @@ struct rope
 
     void move(char direction, int distance)
     {
+        //We need to move one by one else we'll get only straigth lines
+        //Which shouldn't always be the case
         for (int i = 0; i < distance; i++)
         {
             switch (direction)
@@ -131,9 +136,11 @@ struct rope
                     }
                 }
 
+                // Moving the head of the next rope to the tail of the current one
                 if (current->next != nullptr)
                     current->next->H = pos(current->T);
 
+                //Recording
                 current->record_pos();
 
                 current = current->next;
@@ -145,6 +152,8 @@ struct rope
 
     void record_pos()
     {
+        //unique_set gave me weird result, had to add a constructor to ropes
+        //But it wasn't really necessary so instead I just add this line
         if (std::find(visited.begin(), visited.end(), pos(T)) == visited.end())
             visited.push_back(pos(T));
     }
@@ -164,7 +173,8 @@ int main(int argc, char *argv[])
     // Rope generation
     rope root = {{0, 0}, {0, 0}};
     rope *current = &root;
-    for (int i = 1; i < KNOT_COUNT - 1; i++)
+    //Why -2 ? Because by creating a rope we already have 2 knots, the head and the tail
+    for (int i = 0; i < KNOT_COUNT - 2; i++)
     {
         rope *next = new rope();
         next->previous = current;
@@ -172,6 +182,8 @@ int main(int argc, char *argv[])
         current = next;
     }
 
+
+    //Reading instructions
     string line;
     while (getline(input, line))
     {
@@ -184,7 +196,7 @@ int main(int argc, char *argv[])
         root.move(direction, distance);
     }
 
-    // We get the end of the rope
+    //Display visited count for each knot
     rope *end = &root;
     int i = 1;
     while (end != nullptr)

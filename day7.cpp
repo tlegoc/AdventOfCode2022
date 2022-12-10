@@ -1,3 +1,14 @@
+/*
+
+    For some reason this one doesn't work on windows??
+    I would love to know why, don't hesitate to do a push request
+
+*/
+
+
+
+
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -103,22 +114,17 @@ struct folder
         }
         printf("%s\n", this->name.c_str());
         for (auto subfolder : this->subfolders)
-        {
             subfolder->printf_folder(depth + 1);
-        }
+
         for (auto file : this->files)
         {
             for (int i = 0; i < depth + 1; i++)
-            {
                 printf(" ");
-            }
+
             printf("%s %ld\n", file->name.c_str(), file->size);
         }
     }
 };
-
-
-
 
 int main(int argc, char *argv[])
 {
@@ -143,6 +149,7 @@ int main(int argc, char *argv[])
 
         std::getline(input, line);
 
+        // CD COMMAND
         if (sscanf(line.c_str(), "$ cd %s", temp_name) == 1)
         {
             name = std::string(temp_name);
@@ -183,6 +190,7 @@ int main(int argc, char *argv[])
                 current_folder = current_folder->subfolders.back();
             }
         }
+        // LS COMMAND
         else if (line == "$ ls")
         {
             std::string ls_line;
@@ -206,6 +214,7 @@ int main(int argc, char *argv[])
                     // Create the folder if it doesn"t exist
                     if (current_folder->contain_folder(temp_name))
                         continue;
+
                     current_folder->subfolders.push_back(new folder{std::string(temp_name), {}, {}});
                     current_folder->subfolders.back()->parent_folder = current_folder;
                 }
@@ -215,6 +224,7 @@ int main(int argc, char *argv[])
                     // Create the file if it doesn't exist
                     if (current_folder->contain_file(temp_name))
                         continue;
+
                     current_folder->files.push_back(new file{std::string(temp_name), size});
                 }
             }
@@ -223,33 +233,31 @@ int main(int argc, char *argv[])
 
     root_folder->printf_folder();
 
-    printf("Total size: %ld\n", root_folder->get_folder_size());
-
-    //This function just return the size of all folders 
-    //That are smaller than the filter size
+    // This function just return the size of all folders
+    // That are smaller than the filter size
     std::vector<long> sizes = root_folder->get_filtered_size(100000);
 
-    //Add them together (could do sum but didn't work ??)
+    // Add them together (could do sum but didn't work ??)
     long total_filtered_size = 0;
     for (auto size : sizes)
         total_filtered_size += size;
 
-    printf("Total filtered size: %ld\n", total_filtered_size);
-
-    //Same as get_filtered_size but without filter
+    // Same as get_filtered_size but without filter
     std::vector<long> all_sizes = root_folder->get_all_sizes();
     sort(all_sizes.begin(), all_sizes.end());
 
     long taken_space = root_folder->get_folder_size();
 
-    printf("Disk usage: %ld (%f)\n", taken_space, (double)taken_space / TOTAL_SPACE);
-    printf("Available: %ld\n", TOTAL_SPACE - taken_space);
-
-    //Find the folder to delete
+    // Find the folder to delete
     long size_index = 0;
     while (size_index < all_sizes.size() && TOTAL_SPACE - taken_space + all_sizes[size_index] < NECESSARY_SPACE)
         size_index++;
 
+    printf("--------------------\n");
+    printf("Total size: %ld\n", root_folder->get_folder_size());
+    printf("Total filtered size: %ld\n", total_filtered_size);
+    printf("Disk usage: %ld (%f)\n", taken_space, (double)taken_space / TOTAL_SPACE);
+    printf("Available: %ld\n", TOTAL_SPACE - taken_space);
     printf("You can delete a folder of size %ld to perform the update\n", all_sizes[size_index]);
 
     return 0;
